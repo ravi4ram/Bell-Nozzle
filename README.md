@@ -120,7 +120,6 @@ Script is written with python (Version: 3.6) on linux. Additional modules requir
 
 * numpy  (tested with Version: 1.18.4 )
 * matplotlib  (tested with Version: 2.1.1 )
-* scipy (tested with Version:  0.19.1 )
 
 
 ## How to run   
