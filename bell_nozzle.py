@@ -164,7 +164,7 @@ def find_wall_angles(ar, Rt, l_percent = 80 ):
 	x_index, x_val = find_nearest(aratio, ar)
 	# if the value at the index is close to input, return it
 	if round(aratio[x_index], 1) == round(ar, 1):
-		return theta_n[x_index], theta_e[x_index]
+		return Ln, theta_n[x_index], theta_e[x_index]
 
 	# check where the index lies, and slice accordingly
 	if (x_index>2):
