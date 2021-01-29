@@ -216,7 +216,7 @@ def find_nearest(array, value):
     return idx, array[idx]  
 
 # nozzle contour plot
-def plot_nozzle(title, Rt, angles, contour):
+def plot_nozzle(ax, title, Rt, angles, contour):
 	# wall angles
 	nozzle_length = angles[0]; theta_n = angles[1]; theta_e = angles[2];
 	
@@ -226,7 +226,10 @@ def plot_nozzle(title, Rt, angles, contour):
 	xbell = contour[6]; ybell = contour[7]; nybell = contour[8];
 	
 	# plot
-	ax = plt.axes()	
+
+	# set correct aspect ratio
+	ax.set_aspect('equal')
+
 	# throat enterant
 	ax.plot(xe, ye, linewidth=2.5, color='g')
 	ax.plot(xe, nye, linewidth=2.5, color='g')
@@ -321,7 +324,6 @@ def plot_nozzle(title, Rt, angles, contour):
 	
 	# show
 	plt.title(title, fontsize=9)
-	plt.show()		
 	return
 
 # theta_n in rad,  origin =[startx, starty], degree symbol
@@ -342,6 +344,80 @@ def draw_angle_arc(ax, theta_n, origin, degree_symbol=r'$\theta$'):
 	ax.text(startx+0.5, starty+0.5, degree_symbol + ' = ' + str(round(theta_n,1)) + u"\u00b0")	
 	return
 
+# ring of radius r, height h, base point a
+def ring(r, h, a=0, n_theta=30, n_height=10):
+    theta = np.linspace(0, 2*np.pi, n_theta)
+    v = np.linspace(a, a+h, n_height )
+    theta, v = np.meshgrid(theta, v)
+    x = r*np.cos(theta)
+    y = r*np.sin(theta)
+    z = v
+    return x, y, z
+
+# Set 3D plot axes to equal scale. 
+# Required since `ax.axis('equal')` and `ax.set_aspect('equal')` don't work on 3D.
+def set_axes_equal_3d(ax: plt.Axes):
+    """	
+    https://stackoverflow.com/questions/13685386/matplotlib-equal-unit-length-with-equal-aspect-ratio-z-axis-is-not-equal-to
+    """
+    limits = np.array([
+        ax.get_xlim3d(),
+        ax.get_ylim3d(),
+        ax.get_zlim3d(),
+    ])
+    origin = np.mean(limits, axis=1)
+    radius = 0.5 * np.max(np.abs(limits[:, 1] - limits[:, 0]))
+    _set_axes_radius(ax, origin, radius)
+    return
+
+# set axis limits
+def _set_axes_radius(ax, origin, radius):
+    x, y, z = origin
+    ax.set_xlim3d([x - radius, x + radius])
+    ax.set_ylim3d([y - radius, y + radius])
+    ax.set_zlim3d([z - radius, z + radius])
+    return
+
+# 3d plot
+def plot3D(ax, contour):
+	# unpack the contour values
+	xe = contour[0];   	ye = contour[1];   	nye = contour[2];
+	xe2 = contour[3]; 	ye2 = contour[4];  	nye2 = contour[5];
+	xbell = contour[6]; ybell = contour[7]; nybell = contour[8];
+	# collect and append array values
+	x = []; y = [];
+	x = np.append(x, xe);  y = np.append(y, ye)	
+	x = np.append(x, xe2);  y = np.append(y, ye2)	
+	x = np.append(x, xbell);  y = np.append(y, ybell)	
+	
+	# ring thickness
+	thick = 5 * (x[1] - x[0]) # 0.01
+	
+	# draw multiple rings to create 3d structure
+	for i in range(len(y)):
+		X, Y, Z = ring(y[i], thick, x[i])
+		ax.plot_surface(X, Y, Z, color='g')	
+		
+	# set correct aspect ratio
+	ax.set_box_aspect([1,1,1])
+	set_axes_equal_3d(ax)
+	# set view
+	ax.view_init(-170, -15)
+	return
+
+def plot(title, throat_radius, angles, contour):
+	# Plot 3d view
+	fig = plt.figure(figsize=(12,9))
+	# plot some 2d information
+	ax1 = fig.add_subplot(121)
+	plot_nozzle(ax1, title, throat_radius, angles, contour)
+	# plot 3d view
+	ax2 = fig.add_subplot(122, projection='3d')
+	plot3D(ax2, contour)	
+	# show
+	fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+	plt.show()
+	return
 
 # __main method__
 if __name__=="__main__":
@@ -357,8 +433,8 @@ if __name__=="__main__":
 	# rao_bell_nozzle_contour
 	angles, contour = bell_nozzle(k, aratio, throat_radius, l_percent)
 	# plot contour
-	title = 'Bell Nozzle \n [Area Ratio = ' + str(round(aratio,1)) + ', Throat Radius = ' + str(round(throat_radius,1))
-	plot_nozzle(title, throat_radius, angles, contour)
+	title = 'Bell Nozzle \n [Area Ratio = ' + str(round(aratio,1)) + ', Throat Radius = ' + str(round(throat_radius,1)) + ']' 
+	plot(title, throat_radius, angles, contour)
 
 	# --------------- Nozzle-2------------------
 
@@ -369,5 +445,5 @@ if __name__=="__main__":
 	# rao_bell_nozzle_contour
 	angles, contour = bell_nozzle(k, aratio, throat_radius, l_percent)
 	# plot contour
-	title = 'Bell Nozzle \n [Area Ratio = ' + str(round(aratio,1)) + ', Throat Radius = ' + str(round(throat_radius,1))
-	plot_nozzle(title, throat_radius, angles, contour)
+	title = 'Bell Nozzle \n [Area Ratio = ' + str(round(aratio,1)) + ', Throat Radius = ' + str(round(throat_radius,1)) + ']' 
+	plot(title, throat_radius, angles, contour)
