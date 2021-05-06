@@ -149,7 +149,7 @@ def find_wall_angles(ar, Rt, l_percent = 80 ):
 	
 	if l_percent == 60:
 		theta_n = theta_n_60; theta_e = theta_e_60;
-		Ln = 0.8 * f1
+		Ln = 0.6 * f1
 	elif l_percent == 80:
 		theta_n = theta_n_80; theta_e = theta_e_80;
 		Ln = 0.8 * f1		
