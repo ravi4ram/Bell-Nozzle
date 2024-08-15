@@ -137,10 +137,10 @@ def bell_nozzle(k, aratio, Rt, l_percent):
 def find_wall_angles(ar, Rt, l_percent = 80 ):
 	# wall-angle empirical data
 	aratio 		= [ 4,    5,    10,   20,   30,   40,   50,   100]
-	theta_n_60 	= [20.5, 20.5, 16.0, 14.5, 14.0, 13.5, 13.0, 11.2]
+	theta_n_60 	= [26.5, 28.0, 32.0, 35.0, 36.2, 37.1, 35.0, 40.0]	
 	theta_n_80 	= [21.5, 23.0, 26.3, 28.8, 30.0, 31.0, 31.5, 33.5]
 	theta_n_90 	= [20.0, 21.0, 24.0, 27.0, 28.5, 29.5, 30.2, 32.0]
-	theta_e_60 	= [26.5, 28.0, 32.0, 35.0, 36.2, 37.1, 35.0, 40.0]
+	theta_e_60 	= [20.5, 20.5, 16.0, 14.5, 14.0, 13.5, 13.0, 11.2]
 	theta_e_80 	= [14.0, 13.0, 11.0,  9.0,  8.5,  8.0,  7.5,  7.0]
 	theta_e_90 	= [11.5, 10.5,  8.0,  7.0,  6.5,  6.0,  6.0,  6.0]	
 
@@ -424,7 +424,7 @@ if __name__=="__main__":
 	
 	# constants
 	k 	= 1.21		# ratio of specific heats
-	l_percent = 80	# nozzle length percntage (60, 80, 90)
+	l_percent = 60	# nozzle length percntage (60, 80, 90)
 	
 	# typical upper stage values
 	aratio = 25 			# Ae / At	
