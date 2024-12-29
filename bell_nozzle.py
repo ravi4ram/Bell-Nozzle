@@ -339,7 +339,7 @@ def draw_angle_arc(ax, theta_n, origin, degree_symbol=r'$\theta$'):
 	# horizontal line
 	# ax.hlines(y=starty, xmin=startx, xmax=length, linewidth=0.5, color='k')
 	# angle
-	arc_obj = Arc([startx, starty], 1, 1, 0, 0, math.degrees(theta_n), color='k' )
+	arc_obj = Arc([startx, starty], 1, 1, angle=0, theta1=0, theta2=math.degrees(theta_n), color='k' )
 	ax.add_patch(arc_obj)
 	ax.text(startx+0.5, starty+0.5, degree_symbol + ' = ' + str(round(theta_n,1)) + u"\u00b0")	
 	return
